@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using server.Data;
 using server.Models.Games;
+using server.Models.Requests.Game;
 using server.Models.Responses;
+using server.Models.Responses.Game;
 using server.Services.Interfaces;
 
 namespace server.Controllers;
@@ -20,16 +22,16 @@ public class GameController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<BaseResponse<IEnumerable<Game>>> GetGames()
+    public async Task<GetGamesResponseModel> GetGames()
     {
         var games = await _gameService.GetAll();
         return games;
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Game game)
+    public async Task<IActionResult> Create(CreateGameRequestModel game)
     {
-        var response = await _gameService.Create(game);
+        var response = await _gameService.CreateGame(game);
         if (response.StatusCodes == Models.Enums.StatusCode.Error)
         {
             return BadRequest(response);
@@ -40,7 +42,7 @@ public class GameController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetGame(int id)
     {
-        var response = await _gameService.GetById(id);
+        var response = await _gameService.GetGame(id);
 
         if (response.StatusCodes == Models.Enums.StatusCode.NotFound)
         {
@@ -53,7 +55,7 @@ public class GameController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> delete(int id)
     {
-        var response = await _gameService.Delete(id);
+        var response = await _gameService.DeleteGame(id);
 
         if (response.StatusCodes == Models.Enums.StatusCode.NotFound)
         {

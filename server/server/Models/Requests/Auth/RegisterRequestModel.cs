@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace server.Models.ViewModels;
+namespace server.Models.Requests;
 
-public class RegisterViewModel
+public class RegisterRequestModel
 {
     [Required(ErrorMessage = "Укажите логин")]
     [MaxLength(20, ErrorMessage = "Логин не должен превышать 20 символов")]

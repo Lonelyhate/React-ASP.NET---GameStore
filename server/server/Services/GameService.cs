@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using server.Data;
 using server.Models.Enums;
 using server.Models.Games;
+using server.Models.Requests.Game;
 using server.Models.Responses;
+using server.Models.Responses.Game;
 using server.Services.Interfaces;
 
 namespace server.Services;
@@ -20,28 +22,43 @@ public class GameService : IGameService
         _dbContext = db;
     }
 
-    public async Task<BaseResponse<Game>> Create(Game game)
+    public async Task<CreateGameResponseModel> CreateGame(CreateGameRequestModel model)
     {
-        var baseResponse = new BaseResponse<Game>();
+        var baseResponse = new CreateGameResponseModel();
 
         try
         {
-            var _game = await _dbContext.Games.FirstOrDefaultAsync(g => g.Title == game.Title);
+            var _game = await _dbContext.Games.FirstOrDefaultAsync(g => g.Title == model.Title);
             if (_game is not null)
             {
                 baseResponse.Description = "Игра с таким названием уже есть";
                 baseResponse.StatusCodes = StatusCode.Error;
                 return baseResponse;
             }
+
+            Game game = new Game()
+            {
+                Title = model.Title,
+                Description = model.Descrption,
+                GameCategory = model.GameCategory
+            };
+
+            CreateGameModel _model = new CreateGameModel()
+            {
+                Title = game.Title,
+                Description = game.Description,
+                GameCategory = game.GameCategory
+            };
+
             await _dbContext.Games.AddAsync(game);
             await _dbContext.SaveChangesAsync();
-            baseResponse.Data = game;
+            baseResponse.Data = _model;
             baseResponse.StatusCodes = StatusCode.OkCreated;
             return baseResponse;
         }
         catch (Exception e)
         {
-            return new BaseResponse<Game>()
+            return new CreateGameResponseModel()
             {
                 Description = $"Game create - {e.Message}",
                 StatusCodes = StatusCode.InternalServer
@@ -49,9 +66,9 @@ public class GameService : IGameService
         }
     }
 
-    public async Task<BaseResponse<Game>> GetById(int id)
+    public async Task<GetGameByIdResponseModel> GetGame(int id)
     {
-        var baseResponse = new BaseResponse<Game>();
+        var baseResponse = new GetGameByIdResponseModel();
 
         try
         {
@@ -69,7 +86,7 @@ public class GameService : IGameService
         }
         catch (Exception e)
         {
-            return new BaseResponse<Game>()
+            return new GetGameByIdResponseModel()
             {
                 Description = $"GetById - {e.Message}",
                 StatusCodes = StatusCode.InternalServer
@@ -77,9 +94,9 @@ public class GameService : IGameService
         }
     }
 
-    public async Task<BaseResponse<IEnumerable<Game>>> GetAll()
+    public async Task<GetGamesResponseModel> GetAll()
     {
-        var baseResponse = new BaseResponse<IEnumerable<Game>>();
+        var baseResponse = new GetGamesResponseModel();
 
         try
         {
@@ -97,7 +114,7 @@ public class GameService : IGameService
         }
         catch (Exception e)
         {
-            return new BaseResponse<IEnumerable<Game>>()
+            return new GetGamesResponseModel()
             {
                 Description = $"GetAll - {e.Message}",
                 StatusCodes = StatusCode.InternalServer
@@ -105,9 +122,9 @@ public class GameService : IGameService
         }
     }
     
-    public async Task<BaseResponse<bool>> Delete (int id)
+    public async Task<GameDeleteResponseModel> DeleteGame(int id)
     {
-        var baseResponse = new BaseResponse<bool>();
+        var baseResponse = new GameDeleteResponseModel();
 
         try
         {
@@ -122,16 +139,21 @@ public class GameService : IGameService
 
             _dbContext.Remove(game);
             await _dbContext.SaveChangesAsync();
-            
+
+            GameDeleteModel deleteResponse = new GameDeleteModel()
+            {
+                Success = true
+            };
+
             baseResponse.Description = "Успешно удалено";
             baseResponse.StatusCodes = StatusCode.Ok;
-            baseResponse.Data = true;
+            baseResponse.Data = deleteResponse;
             return baseResponse;
 
         }
         catch (Exception e)
         {
-            return new BaseResponse<bool>()
+            return new GameDeleteResponseModel()
             {
                 Description = $"Delete - {e.Message}",
                 StatusCodes = StatusCode.InternalServer
@@ -139,9 +161,9 @@ public class GameService : IGameService
         }
     }
 
-    public async Task<BaseResponse<IEnumerable<Game>>> SearchGame(string str)
+    public async Task<GameSearchResponseModel> SearchGame(string str)
     {
-        var baseResponse = new BaseResponse<IEnumerable<Game>>();
+        var baseResponse = new GameSearchResponseModel();
 
         try
         {
@@ -162,7 +184,7 @@ public class GameService : IGameService
         }
         catch (Exception e)
         {
-            return new BaseResponse<IEnumerable<Game>>()
+            return new GameSearchResponseModel()
             {
                 Description = $"Delete - {e.Message}",
                 StatusCodes = StatusCode.InternalServer

@@ -58,3 +58,4 @@ C:\Users\nikit\Desktop\c#\GamesStore\server\server\obj\Debug\net6.0\server.pdb
 C:\Users\nikit\Desktop\c#\GamesStore\server\server\obj\Debug\net6.0\server.genruntimeconfig.cache
 C:\Users\nikit\Desktop\c#\GamesStore\server\server\obj\Debug\net6.0\ref\server.dll
 C:\Users\nikit\Desktop\c#\GamesStore\server\server\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\nikit\Desktop\c#\GamesStore\server\server\bin\Debug\net6.0\Newtonsoft.Json.dll

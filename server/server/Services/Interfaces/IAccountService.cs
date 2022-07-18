@@ -1,13 +1,14 @@
 ﻿using System.Security.Claims;
 using server.Models;
+using server.Models.Requests;
 using server.Models.Responses;
-using server.Models.ViewModels;
+using server.Models.Responses.Auth;
 
 namespace server.Services.Interfaces;
 
 public interface IAccountService
 {
-    Task<BaseResponse<User>> Register(RegisterViewModel model);
+    Task<RegisterResponseModel> Register(RegisterRequestModel model);
 
-    Task<BaseResponse<string>> Login(LoginViewModel model);
+    Task<LoginResponseModel> Login(LoginRequestModel model);
 }

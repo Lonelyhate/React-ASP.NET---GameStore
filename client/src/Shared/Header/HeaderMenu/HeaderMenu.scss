@@ -1,0 +1,17 @@
+.menu{
+    margin-left: 50px;
+    &__list{
+        display: flex;
+    }
+    &__item{
+        &:not(:last-child){
+            margin-right: 15px;
+        }
+    }
+    &__link{
+        text-decoration: none;
+        color: #fff;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+}

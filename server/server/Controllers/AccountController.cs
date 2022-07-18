@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using server.Models;
+using server.Models.Requests;
 using server.Models.Responses;
-using server.Models.ViewModels;
+using server.Models.Responses.Auth;
 using server.Services.Interfaces;
 
 namespace server.Controllers;
@@ -21,7 +22,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<BaseResponse<User>>> Register(RegisterViewModel model)
+    public async Task<ActionResult<RegisterResponseModel>> Register(RegisterRequestModel model)
     {
         var response = await _accountService.Register(model);
 
@@ -34,7 +35,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<BaseResponse<string>>> Login(LoginViewModel model)
+    public async Task<ActionResult<LoginResponseModel>> Login(LoginRequestModel model)
     {
         var response = await _accountService.Login(model);
 
